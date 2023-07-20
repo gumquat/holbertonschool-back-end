@@ -14,7 +14,6 @@ def get_employee_todo_progress(employee_id):
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
     response = requests.get(url)
-    response.raise_for_status()
     todo_list = response.json()
 
     employee_name = ""
@@ -31,7 +30,6 @@ def get_employee_todo_progress(employee_id):
 
     print(f"Employee\
            {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
-    print(f"{employee_name}: {done_tasks} tasks")
 
     if done_tasks > 0:
         print("Completed tasks:")
@@ -40,12 +38,5 @@ def get_employee_todo_progress(employee_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python script_name.py EMPLOYEE_ID")
-        sys.exit(1)
-
-    try:
         employee_id = int(sys.argv[1])
         get_employee_todo_progress(employee_id)
-    except ValueError:
-        print("Error: Employee ID should be an integer.")
-        sys.exit(1)
