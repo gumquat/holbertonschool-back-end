@@ -11,8 +11,6 @@ import requests
 import urllib.request
 
 
-import requests
-
 def get_employee_todo_progress(employee_id):
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
