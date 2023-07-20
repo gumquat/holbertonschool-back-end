@@ -9,19 +9,13 @@ in a specified format.
 import requests
 import sys
 
+
 def get_employee_todo_progress(employee_id):
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        todo_list = response.json()
-    except requests.exceptions.RequestException as e:
-        print("Error fetching data:", e)
-        sys.exit(1)
-    except requests.exceptions.JSONDecodeError as e:
-        print("Error parsing JSON data:", e)
-        sys.exit(1)
+    response = requests.get(url)
+    response.raise_for_status()
+    todo_list = response.json()
 
     employee_name = ""
     total_tasks = len(todo_list)
@@ -35,7 +29,8 @@ def get_employee_todo_progress(employee_id):
         if 'username' in task:
             employee_name = task['username']
 
-    print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+    print(f"Employee\
+           {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
     print(f"{employee_name}: {done_tasks} tasks")
 
     if done_tasks > 0:
