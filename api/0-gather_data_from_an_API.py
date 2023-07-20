@@ -6,9 +6,7 @@ progress for a given employee ID using the
 It provides information about completed tasks and their titles
 in a specified format.
 """
-import json
 import requests
-import urllib.request
 
 
 def get_employee_todo_progress(employee_id):
