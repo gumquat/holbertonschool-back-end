@@ -18,6 +18,7 @@ def get_employee_todo_progress(employee_id):
     response.raise_for_status()
     todo_list = response.json()
 
+    """VARIABLES"""
     employee_name = ""
     total_tasks = len(todo_list)
     done_tasks = 0
@@ -34,9 +35,8 @@ def get_employee_todo_progress(employee_id):
            {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
 
     if done_tasks >= 0:
-        print("Completed tasks:")
-        for title in completed_task_titles:
-            print(f"\t{title}")
+        for _ in completed_task_titles:
+            print(f"\t{_}")
 
 if __name__ == "__main__":
     import sys
