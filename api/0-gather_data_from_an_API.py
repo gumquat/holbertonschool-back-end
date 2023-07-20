@@ -42,7 +42,7 @@ def get_employee_todo_progress(employee_id):
     print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
     print(f"{employee_name}: {done_tasks} tasks")
 
-    if done_tasks > 0:
+    if done_tasks >= 0:
         print("Completed tasks:")
         for title in completed_task_titles:
             print(f"\t{title}")
