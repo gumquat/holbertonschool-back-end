@@ -6,8 +6,8 @@ progress for a given employee ID using the
 It provides information about completed tasks and their titles
 in a specified format.
 """
-import sys
 import requests
+import sys
 
 def get_employee_todo_progress(employee_id):
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
