@@ -7,35 +7,44 @@ It provides information about completed tasks and their titles
 in a specified format.
 """
 import requests
-import sys
 
 
-def get_employee_todo_progress(employee_id):
-    url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+API_URL = "https://jsonplaceholder.typicode.com/users"
+TODOS_URL = "https://jsonplaceholder.typicode.com/todos"
 
-    response = requests.get(url)
-    todo_list = response.json()
+def get_employee_info(employee_id):
+    """Get employee information from the API"""
+    employee_response = requests.get(f"{API_URL}/{employee_id}")
+    employee_data = employee_response.json()
 
-    employee_name = ""
-    total_tasks = len(todo_list)
-    done_tasks = 0
-    completed_task_titles = []
+    """Get TODO list for the employee"""
+    todos_response = requests.get(TODOS_URL, params={"userId": employee_id})
+    todos_data = todos_response.json()
 
-    for task in todo_list:
-        if task['completed']:
-            done_tasks += 1
-            completed_task_titles.append(task['title'])
-        if 'username' in task:
-            employee_name = task['username']
+    """Extract completed tasks and count"""
+    completed_tasks = [todo["title"] for todo in todos_data if todo["completed"]]
+    num_completed_tasks = len(completed_tasks)
+    total_tasks = len(todos_data)
 
-    print(f"Employee\
-           {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+    return employee_data["name"], num_completed_tasks, total_tasks, completed_tasks
 
-    if done_tasks > 0:
-        print("Completed tasks:")
-        for title in completed_task_titles:
-            print(f"\t{title}")
+def display_employee_progress(employee_name, num_completed_tasks, total_tasks, completed_tasks):
+    print(
+        f"Employee {employee_name} is done with tasks({num_completed_tasks}/{total_tasks}):"
+    )
+    for task in completed_tasks:
+        print("\t", task)
 
 if __name__ == "__main__":
+    import sys
+
     if len(sys.argv) != 2:
-        employee_id = int(sys.argv[1])
+        print("Usage: python script.py <employee_id>")
+        sys.exit(1)
+
+    employee_id = int(sys.argv[1])
+    try:
+        name, completed, total, tasks = get_employee_info(employee_id)
+        display_employee_progress(name, completed, total, tasks)
+    except requests.exceptions.RequestException:
+        print("Error: Unable to fetch data from the API.")
