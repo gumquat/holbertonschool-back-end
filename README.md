@@ -1,5 +1,5 @@
 <h1 align="center">Hi 👋, I'm Evan Newman</h1>
-<h3 align="center">A passionate frontend developer from Oklahoma</h3>
+<h3 align="center">A passionate full stack web developer from Oklahoma</h3>
 
 - 🔭 I’m currently working on [Full Stack Web Development](https://github.com/gumquat)
 
