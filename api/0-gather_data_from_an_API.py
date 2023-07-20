@@ -49,14 +49,5 @@ def get_employee_todo_progress(employee_id):
 
 if __name__ == "__main__":
     import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python script_name.py EMPLOYEE_ID")
-        exit(1)
-
-    try:
-        employee_id = int(sys.argv[1])
-        get_employee_todo_progress(employee_id)
-    except ValueError:
-        print("Error: Employee ID should be an integer.")
-        exit(1)
+    employee_id = int(sys.argv[1])
+    get_employee_todo_progress(employee_id)
