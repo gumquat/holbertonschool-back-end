@@ -6,37 +6,51 @@ progress for a given employee ID using the
 It provides information about completed tasks and their titles
 in a specified format.
 """
+import sys
 import requests
-
 
 def get_employee_todo_progress(employee_id):
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
-    response = requests.get(url)
-    response.raise_for_status()
-    todo_list = response.json()
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        todo_list = response.json()
+    except requests.exceptions.RequestException as e:
+        print("Error fetching data:", e)
+        sys.exit(1)
+    except requests.exceptions.JSONDecodeError as e:
+        print("Error parsing JSON data:", e)
+        sys.exit(1)
 
-    """VARIABLES"""
     employee_name = ""
     total_tasks = len(todo_list)
     done_tasks = 0
     completed_task_titles = []
 
-    for _ in todo_list:
-        if _['completed']:
+    for task in todo_list:
+        if task['completed']:
             done_tasks += 1
-            completed_task_titles.append(_['title'])
-        if 'username' in _:
-            employee_name = _['username']
+            completed_task_titles.append(task['title'])
+        if 'username' in task:
+            employee_name = task['username']
 
-    print(f"Employee\
-           {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+    print(f"Employee {employee_name} is done with tasks ({done_tasks}/{total_tasks}):")
+    print(f"{employee_name}: {done_tasks} tasks")
 
-    if done_tasks >= 0:
-        for _ in completed_task_titles:
-            print(f"\t{_}")
+    if done_tasks > 0:
+        print("Completed tasks:")
+        for title in completed_task_titles:
+            print(f"\t{title}")
 
 if __name__ == "__main__":
-    import sys
-    employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
+    if len(sys.argv) != 2:
+        print("Usage: python script_name.py EMPLOYEE_ID")
+        sys.exit(1)
+
+    try:
+        employee_id = int(sys.argv[1])
+        get_employee_todo_progress(employee_id)
+    except ValueError:
+        print("Error: Employee ID should be an integer.")
+        sys.exit(1)
