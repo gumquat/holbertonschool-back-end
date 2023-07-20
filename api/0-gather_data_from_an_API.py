@@ -34,12 +34,6 @@ def get_employee_todo_progress(employee_id):
         completed_tasks = item.get('number_of_done_tasks',)
         total_tasks = item.get('total_number_of_tasks',)
 
-    """
-                            backup strat for getting amount of todos
-    total_tasks = len(todos)
-    completed_tasks = [todo for todo in todos if todo['completed']]
-    """
-
     """PRINT selected employee TODO list progress"""
     print(f"Employee {employee_name} is done with tasks ({(completed_tasks)}/{total_tasks}):")
 
