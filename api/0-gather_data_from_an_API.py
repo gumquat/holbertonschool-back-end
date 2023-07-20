@@ -1,5 +1,7 @@
 #!/usr/bin/python3
+import json
 import requests
+import urllib.request
 """
 This Python script fetches and displays an employee's TODO list 
 progress for a given employee ID using the 
@@ -9,29 +11,43 @@ in a specified format.
 """
 
 def get_employee_todo_progress(employee_id):
-    """grab the TODO list data for the recieved employee ID"""
+    """grab the TODO list data for the recieved employee ID"""    
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-    response = requests.get(url)
-    todos = response.json()
+    
+    try:
+        with urllib.request.urlopen(url) as response:
+            response = requests.get(url)
+            todos = response.json()
+    except urllib.error.URLError as x:
+        print("Error fetching data:", x)
+        exit(1)
+    """stored as dict so make sure to grab data that way"""
+    try:
+        data_list = json.loads(todos)
+    except json.JSONDecodeError as x:
+        print("Error parsing JSON data:", x)
+        exit(1)
 
-    """filter completed tasks and count the number of tasks"""
+    """get relavent data from dict object"""
+    for item in data_list:
+        employee_name = item.get('exployee_name',)
+        completed_tasks = item.get('number_of_done_tasks',)
+        total_tasks = item.get('total_number_of_tasks',)
+
+    """
+                            backup strat for getting amount of todos
     total_tasks = len(todos)
     completed_tasks = [todo for todo in todos if todo['completed']]
+    """
 
-    """pull employee name from the first TODO record"""
-    employee_name = todos[0]['userId']
-    # Assuming that the first name record of the user is the employee name
-    url_user = f'https://jsonplaceholder.typicode.com/users/{employee_name}'
-    response_user = requests.get(url_user)
-    user_info = response_user.json()
-    employee_name = user_info['name']
+    """PRINT selected employee TODO list progress"""
+    print(f"Employee {employee_name} is done with tasks ({(completed_tasks)}/{total_tasks}):")
 
-    """Display the employee TODO list progress"""
-    print(f"Employee {employee_name} is done with tasks ({len(completed_tasks)}/{total_tasks}):")
+    """HOW TO GET THE TITLE OF COMPLTETED TASKS? FOR THE BELOW LINE"""
 
-    """Display the titles of completed tasks"""
-    for task in completed_tasks:
-        print(f"\t{task['title']}")
+    """PRINT completed task titles"""
+    for _ in completed_tasks:
+        print(f"\t{_['title']}")
 
 
 """DO NOT REMOVE BELOW CODE - NECCESSARY TO RUN"""
