@@ -1,10 +1,6 @@
 #!/usr/bin/python3
 """
-This Python script fetches and displays an employee's TODO list
-progress for a given employee ID using the
-[jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com/) API.
-It provides information about completed tasks and their titles
-in a specified format.
+API set up to retrieve data from a url
 """
 import requests
 
@@ -13,16 +9,16 @@ TODOS_URL = "https://jsonplaceholder.typicode.com/todos"
 
 
 def get_employee_info(employee_id):
-    """get employee information from the API"""
+    # Get employee information from the API
     employee_response = requests.get(f"{API_URL}/{employee_id}")
     employee_data = employee_response.json()
 
-    """get TODO list for the employee"""
+    # Get TODO list for the employee
     todos_response = requests.get(TODOS_URL,
                                   params={"userId": employee_id})
     todos_data = todos_response.json()
 
-    """extract completed tasks and count"""
+    # Extract completed tasks and count
     completed_tasks = [todo["title"]
                        for todo in todos_data if todo["completed"]]
     num_completed_tasks = len(completed_tasks)
