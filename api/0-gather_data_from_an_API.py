@@ -15,18 +15,11 @@ def get_employee_todo_progress(employee_id):
 
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        todo_list = response.json()
-    except requests.exceptions.RequestException as e:
-        print("Error fetching data:", e)
-        exit(1)
-    except requests.exceptions.JSONDecodeError as e:
-        print("Error parsing JSON data:", e)
-        exit(1)
+    response = requests.get(url)
+    response.raise_for_status()
+    todo_list = response.json()
 
-    employee_name = ""
+    name = ""
     total_tasks = len(todo_list)
     done_tasks = 0
     completed_task_titles = []
@@ -36,11 +29,11 @@ def get_employee_todo_progress(employee_id):
             done_tasks += 1
             completed_task_titles.append(task['title'])
         if 'username' in task:
-            employee_name = task['username']
+            name = task['username']
 
-    print("Employee {} is done with tasks({}/{}):".format(employee_name,
-                                                    done_tasks, total_tasks))
-    print(f"{employee_name}: {done_tasks} tasks")
+    print("Employee {} is done\
+           with tasks({}/{}):".format(name, done_tasks, total_tasks))
+    print(f"{name}: {done_tasks} tasks")
 
     if done_tasks > 0:
         print("Completed tasks:")
