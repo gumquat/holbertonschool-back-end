@@ -1,4 +1,12 @@
+#!/usr/bin/python3
 import requests
+"""
+This Python script fetches and displays an employee's TODO list 
+progress for a given employee ID using the 
+[jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com/) API. 
+It provides information about completed tasks and their titles
+in a specified format.
+"""
 
 def get_employee_todo_progress(employee_id):
     """grab the TODO list data for the recieved employee ID"""
