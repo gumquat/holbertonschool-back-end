@@ -9,16 +9,16 @@ TODOS_URL = "https://jsonplaceholder.typicode.com/todos"
 
 
 def get_employee_info(employee_id):
-    # Get employee information from the API
+    """get employee information from the API"""
     employee_response = requests.get(f"{API_URL}/{employee_id}")
     employee_data = employee_response.json()
 
-    # Get TODO list for the employee
+    """get TODO list for the employee"""
     todos_response = requests.get(TODOS_URL,
                                   params={"userId": employee_id})
     todos_data = todos_response.json()
 
-    # Extract completed tasks and count
+    """Extract completed tasks and count"""
     completed_tasks = [todo["title"]
                        for todo in todos_data if todo["completed"]]
     num_completed_tasks = len(completed_tasks)
