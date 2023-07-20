@@ -13,7 +13,6 @@ in a specified format.
 def get_employee_todo_progress(employee_id):
     """grab the TODO list data for the recieved employee ID"""    
     url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
-    
     try:
         with urllib.request.urlopen(url) as response:
             response = requests.get(url)
@@ -30,18 +29,21 @@ def get_employee_todo_progress(employee_id):
 
     """get relavent data from dict object"""
     for item in data_list:
-        employee_name = item.get('exployee_name',)
-        completed_tasks = item.get('number_of_done_tasks',)
-        total_tasks = item.get('total_number_of_tasks',)
+        employee_name = item.get('name',)
+        total_tasks = len(todos)
+        """count len of tasks with 'completed - LOOP'"""
+        for _ in todos:
+            if _['completed']:
+                completed_tasks += 1
+                completed_task_titles.append(_['title'])
+        completed_task_titles = []
 
     """PRINT selected employee TODO list progress"""
     print(f"Employee {employee_name} is done with tasks ({(completed_tasks)}/{total_tasks}):")
 
-    """HOW TO GET THE TITLE OF COMPLTETED TASKS? FOR THE BELOW LINE"""
-
     """PRINT completed task titles"""
     for _ in completed_tasks:
-        print(f"\t{_['title']}")
+        print(f"\t{_[completed_task_titles]}")
 
 
 """DO NOT REMOVE BELOW CODE - NECCESSARY TO RUN"""
@@ -49,7 +51,6 @@ if __name__ == "__main__":
     """hope to GOD the script is called with the employee ID as a command-line argument"""
     import sys
     if len(sys.argv) != 2:
-        print("Usage: python script_name.py employee_id")
         sys.exit(1)
     
     try:
