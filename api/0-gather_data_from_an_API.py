@@ -5,6 +5,12 @@ returns info about their TODO list progress"""
 import requests
 import sys
 
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print(f"UsageError: python3 {__file__} employee_id(int)")
+        sys.exit(1)
+
     API_URL = "https://jsonplaceholder.typicode.com"
     EMPLOYEE_ID = sys.argv[1]
 
@@ -27,8 +33,3 @@ import sys
         f"({total_done_tasks}/{total_tasks}):")
     for task in done_tasks:
         print(f"\t {task['title']}")
-
-        if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"UsageError: python3 {__file__} employee_id(int)")
-        sys.exit(1)
