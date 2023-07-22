@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""connect to and pull info from 
+"""connect to and pull info from
 REST API using an employee ID
 returns info about their TODO list progress"""
 import json
