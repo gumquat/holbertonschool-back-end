@@ -11,7 +11,7 @@ def display_employee_progress(employee_id):
 
     empl_data = requests.get(empl_url).json()
     todo_data = requests.get(todo_url,
-                            params={"userId": employee_id}).json()
+                             params={"userId": employee_id}).json()
 
     empl_name = empl_data.get("name")
     completed_tasks = [t["title"] for t in todo_data if t["completed"]]
@@ -19,7 +19,7 @@ def display_employee_progress(employee_id):
     num_total = len(todo_data)
 
     print("Employee {} is done with tasks({}/{}):"
-                .format(empl_name, num_done, num_total))
+          .format(empl_name, num_done, num_total))
     for task in completed_tasks:
         print(f"\t {task}")
 
