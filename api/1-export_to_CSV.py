@@ -1,35 +1,43 @@
 #!/usr/bin/python3
-"""connect to and pull info from
-REST API using an employee ID
-returns info about their TODO list progress"""
+"""Export data in CSV"""
 import csv
 import requests
-import sys
+from sys import argv
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"UsageError: python3 {__file__} employee_id(int)")
-        sys.exit(1)
+def get_api():
+    """Get data from the API"""
+    if len(argv) != 2:
+        print("Usage: python script_name.py user_id")
+        return
 
-    API_URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
+    url = 'https://jsonplaceholder.typicode.com/'
+    uid = argv[1]
 
-    response = requests.get(
-        f"{API_URL}/users/{EMPLOYEE_ID}/todos",
-        params={"_expand": "user"}
-    )
-    data = response.json()
+    try:
+        usr_response = requests.get(url + 'users/{}'.format(uid))
+        usr_response.raise_for_status()
+        usr = usr_response.json()
 
-    if not len(data):
-        print("RequestError:", 404)
-        sys.exit(1)
+        todo_response = requests.get(url + 'todos', params={'userId': uid})
+        todo_response.raise_for_status()
+        todo = todo_response.json()
 
-    username = data[0]["user"]["username"]
+        with open('{}.csv'.format(uid), 'w') as file:
+            writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+            for employee in todo:
+                user_id = uid
+                username = usr.get('username')
+                task_comp = employee.get('completed')
+                task_title = employee.get('title')
 
-    with open(f"{EMPLOYEE_ID}.csv", "w", newline="") as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_NONNUMERIC)
-        for task in data:
-            writer.writerow(
-                [EMPLOYEE_ID, username, str(task["completed"]), task["title"]]
-            )
+                emp_record = [user_id, username, task_comp, task_title]
+                writer.writerow(emp_record)
+
+        print("Number of tasks in CSV: OK")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Failed to fetch data from the API. {e}")
+
+if __name__ == '__main__':
+    get_api()

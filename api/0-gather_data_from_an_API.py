@@ -1,35 +1,29 @@
 #!/usr/bin/python3
-"""connect to and pull info from
-REST API using an employee ID
-returns info about their TODO list progress"""
+"""Gets infro about user from an API"""
 import requests
-import sys
 
+
+def display_employee_progress(employee_id):
+    """ script must display to stdout the employee todo list progress """
+    url = "https://jsonplaceholder.typicode.com"
+    empl_url = f"{url}/users/{employee_id}"
+    todo_url = f"{url}/todos"
+
+    empl_data = requests.get(empl_url).json()
+    todo_data = requests.get(todo_url,
+                             params={"userId": employee_id}).json()
+
+    empl_name = empl_data.get("name")
+    completed_tasks = [t["title"] for t in todo_data if t["completed"]]
+    num_done = len(completed_tasks)
+    num_total = len(todo_data)
+
+    print("Employee {} is done with tasks({}/{}):"
+          .format(empl_name, num_done, num_total))
+    for task in completed_tasks:
+        print(f"\t {task}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"UsageError: python3 {__file__} employee_id(int)")
-        sys.exit(1)
+    import sys
 
-    API_URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
-
-    response = requests.get(
-        f"{API_URL}/users/{EMPLOYEE_ID}/todos",
-        params={"_expand": "user"}
-    )
-    data = response.json()
-
-    if not len(data):
-        print("RequestError:", 404)
-        sys.exit(1)
-
-    employee_name = data[0]["user"]["name"]
-    total_tasks = len(data)
-    done_tasks = [task for task in data if task["completed"]]
-    total_done_tasks = len(done_tasks)
-
-    print(f"Employee {employee_name} is done with tasks"
-        f"({total_done_tasks}/{total_tasks}):")
-    for task in done_tasks:
-        print(f"\t {task['title']}")
+    display_employee_progress(int(sys.argv[1]))
